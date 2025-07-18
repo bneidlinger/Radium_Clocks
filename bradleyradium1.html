@@ -3,113 +3,403 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bradley Radium Clock — Tangnet Asset</title>
+  <title>Bradley Radium Clock (1955) — Tangnet Museum Collection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  
   <style>
+    :root {
+      --primary-gold: #D4AF37;
+      --deep-black: #0A0A0A;
+      --warm-gray: #2D2D2D;
+      --light-gray: #F5F5F0;
+      --danger-red: #DC143C;
+      --radium-green: #39FF14;
+      --cyber-cyan: #00ffff;
+    }
+    
     body {
-      background-color: #0f0f0f;
-      color: #00ff00;
-      font-family: "Courier New", monospace;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--deep-black);
+      color: var(--light-gray);
+      position: relative;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .typewriter {
+      font-family: 'Courier Prime', monospace;
+    }
+    
+    /* Terminal aesthetic overlay */
+    .terminal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.03) 0px,
+        transparent 1px,
+        transparent 2px,
+        rgba(0, 255, 0, 0.03) 3px
+      );
+      z-index: 1;
+    }
+    
+    /* Radium glow effect */
+    .radium-glow {
+      animation: radium-pulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes radium-pulse {
+      0%, 100% { 
+        filter: drop-shadow(0 0 10px var(--radium-green)); 
+        transform: scale(1);
+      }
+      50% { 
+        filter: drop-shadow(0 0 30px var(--radium-green)) drop-shadow(0 0 50px var(--radium-green)); 
+        transform: scale(1.02);
+      }
+    }
+    
+    /* Navigation styling */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+      color: var(--radium-green);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--radium-green);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* Data display styling */
+    .data-display {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--radium-green);
+      border-radius: 8px;
       padding: 20px;
-      overflow-x: hidden;
+      font-family: 'Courier Prime', monospace;
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.3) inset;
     }
-    h1, h2 {
-      color: #00ffff;
-      text-shadow: 0 0 8px #00ffff;
+    
+    .data-line {
+      color: var(--radium-green);
+      margin: 8px 0;
     }
-    .ascii {
-      white-space: pre;
-      font-size: 12px;
-      color: #ffcc00;
+    
+    .data-label {
+      color: var(--cyber-cyan);
+      display: inline-block;
+      min-width: 200px;
     }
-    .image {
-      margin-top: 20px;
-      border: 2px solid #00ff00;
-      width: 400px;
-      box-shadow: 0 0 20px #00ff00;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+    
+    /* Image frame styling */
+    .specimen-frame {
+      background: linear-gradient(135deg, var(--warm-gray), var(--deep-black));
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
-    .box {
-      border: 1px dashed #00ff00;
-      padding: 10px;
-      margin-top: 20px;
-      background-color: #1a1a1a;
-      box-shadow: 0 0 10px #00ff00 inset;
+    
+    .specimen-image {
+      border: 3px solid var(--primary-gold);
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(57, 255, 20, 0.5);
     }
-    code {
-      display: block;
-      background-color: #000;
-      padding: 10px;
-      border: 1px solid #00ff00;
-      box-shadow: 0 0 5px #00ff00 inset;
-      color: #00ff00;
+    
+    /* Warning badge */
+    .radiation-badge {
+      background: linear-gradient(135deg, var(--danger-red), #8B0000);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
+      animation: warning-pulse 2s ease-in-out infinite;
     }
-    footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 0.9em;
-      color: #555;
+    
+    @keyframes warning-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    .typing {
-      overflow: hidden;
-      border-right: .15em solid #00ff00;
-      white-space: nowrap;
-      animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+    
+    /* Measurement display */
+    .cpm-display {
+      font-size: 3em;
+      color: var(--radium-green);
+      text-shadow: 0 0 20px var(--radium-green);
+      font-family: 'Courier Prime', monospace;
+      font-weight: 700;
     }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+    
+    /* Info cards */
+    .info-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
     }
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: #00ff00; }
+    
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      border-color: var(--primary-gold);
     }
   </style>
 </head>
-<body>
-  <h1 class="typing">🕰️ Tangnet Asset Log: Bradley Radium Clock ☢️</h1>
+<body class="relative">
+  <div class="terminal-overlay"></div>
   
-  <div class="ascii">
-  SYSTEM LOG INITIATED  >>  Tangnet Node 05
-  ┌───────────────────────────────────────────────────────┐
-  │  Asset ID: BRADLEY-RADIUM-1955                        │
-  │  Acquisition: $20 @ St. Paul, MN Antique Shop         │
-  │  Status: HOT (Confirmed radium-lumed)                 │
-  │  Glow: ✅  Visible in darkness                       │
-  │  Current CPM: ~75 (background: 13 CPM)                │
-  └───────────────────────────────────────────────────────┘
-  </div>
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-lg border-b border-green-500/30">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-2 nav-link">
+          <span class="text-2xl">←</span>
+          <span>Back to Collection</span>
+        </a>
+        <div class="flex items-center space-x-4">
+          <span class="text-2xl radium-glow">☢</span>
+          <span class="font-bold text-green-400">Tangnet Museum</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <header class="relative py-16 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-green-900/20 to-transparent"></div>
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <div class="radiation-badge mx-auto mb-6">
+        <span class="text-xl">☢</span>
+        <span>HIGH RADIATION</span>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-black mb-4 text-white">
+        Bradley Radium Clock
+      </h1>
+      <p class="text-xl text-green-400 typewriter">Asset ID: BRADLEY-RADIUM-1955</p>
+    </div>
+  </header>
 
-  <div class="box">
-    <h2>Rick's Notes:</h2>
-    <p>"Oh jeez, Morty — this clock is literally glowing because it’s filled with a mildly dangerous radioactive material that was perfectly normal to sell to 1950s consumers. Incredible. Dangerous. Cool."</p>
-  </div>
+  <main class="container mx-auto px-6 py-12 relative z-10">
+    <!-- Quick Stats Grid -->
+    <div class="grid md:grid-cols-4 gap-6 mb-12">
+      <div class="info-card text-center">
+        <div class="text-3xl mb-2">📅</div>
+        <h3 class="text-lg font-semibold text-cyan-400">Era</h3>
+        <p class="text-2xl font-bold text-white">1955</p>
+      </div>
+      <div class="info-card text-center">
+        <div class="text-3xl mb-2">📍</div>
+        <h3 class="text-lg font-semibold text-cyan-400">Origin</h3>
+        <p class="text-2xl font-bold text-white">West Germany</p>
+      </div>
+      <div class="info-card text-center">
+        <div class="text-3xl mb-2">☢️</div>
+        <h3 class="text-lg font-semibold text-cyan-400">Activity</h3>
+        <p class="cpm-display">75 CPM</p>
+      </div>
+      <div class="info-card text-center">
+        <div class="text-3xl mb-2">💰</div>
+        <h3 class="text-lg font-semibold text-cyan-400">Acquired</h3>
+        <p class="text-2xl font-bold text-white">$20</p>
+      </div>
+    </div>
 
-  <img src="bradleyspicey.jpeg" alt="Bradley Radium Clock" class="image">
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Left Column: Image and Measurements -->
+      <div>
+        <div class="specimen-frame mb-8">
+          <img src="bradleyspicey.jpeg" alt="Bradley Radium Clock" class="specimen-image w-full rounded">
+        </div>
+        
+        <div class="data-display mb-8">
+          <h2 class="text-2xl font-bold text-cyan-400 mb-4">Radiation Measurements</h2>
+          <div class="data-line">
+            <span class="data-label">Background Reading:</span>
+            <span>13 CPM</span>
+          </div>
+          <div class="data-line">
+            <span class="data-label">Clock Face @ Contact:</span>
+            <span class="text-yellow-400">~75 CPM ⚠️</span>
+          </div>
+          <div class="data-line">
+            <span class="data-label">Activity Level:</span>
+            <span class="text-red-400">5.8x Background</span>
+          </div>
+          <div class="data-line">
+            <span class="data-label">Safety Status:</span>
+            <span class="text-red-400">ACTIVE - Handle with care</span>
+          </div>
+        </div>
+      </div>
 
-  <div class="box">
-    <h2>Metadata:</h2>
-    <ul>
-      <li>Manufacturer: Bradley Time, West Germany</li>
-      <li>Era: Circa 1955</li>
-      <li>Movement: Mechanical wind-up</li>
-      <li>Radium lume on hands confirmed</li>
-	  <li>Recovered from: 3338 University AVE SE, Minneapolis</li>
-      <li>Added to Tangnet on: 7-13-25</li>
-    </ul>
-  </div>
+      <!-- Right Column: Details and History -->
+      <div>
+        <div class="bg-gray-900 rounded-xl p-8 mb-8 border border-gray-800">
+          <h2 class="text-3xl font-bold mb-6 text-white">Specimen Details</h2>
+          
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-xl font-semibold text-cyan-400 mb-3">Manufacturing Information</h3>
+              <dl class="grid grid-cols-1 gap-3">
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Manufacturer</dt>
+                  <dd class="text-white font-medium">Bradley Time Division</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Country</dt>
+                  <dd class="text-white font-medium">West Germany</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Model Year</dt>
+                  <dd class="text-white font-medium">Circa 1955</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Movement</dt>
+                  <dd class="text-white font-medium">Mechanical Wind-up</dd>
+                </div>
+              </dl>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-semibold text-cyan-400 mb-3">Radioactive Components</h3>
+              <div class="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+                <p class="text-red-300 mb-2">✓ Radium-226 luminous paint confirmed on hands</p>
+                <p class="text-red-300">✓ Visible glow in darkness after 70+ years</p>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-semibold text-cyan-400 mb-3">Acquisition Details</h3>
+              <dl class="grid grid-cols-1 gap-3">
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Source</dt>
+                  <dd class="text-white font-medium">St. Paul, MN Antique Shop</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Location</dt>
+                  <dd class="text-white font-medium">3338 University Ave SE, Minneapolis</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Price</dt>
+                  <dd class="text-white font-medium">$20 USD</dd>
+                </div>
+                <div class="flex justify-between py-2 border-b border-gray-800">
+                  <dt class="text-gray-400">Catalogued</dt>
+                  <dd class="text-white font-medium">July 13, 2025</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
 
-  <div class="box">
-    <h2>CPM Readout:</h2>
-    <code>
-Background: 13 CPM  
-Clock face at detector: ~75 CPM (spicy!)
-    </code>
-  </div>
+        <!-- Curator's Notes -->
+        <div class="bg-gradient-to-br from-green-900/20 to-cyan-900/20 rounded-xl p-8 border border-green-500/30">
+          <h3 class="text-2xl font-bold mb-4 text-green-400">Curator's Notes</h3>
+          <blockquote class="text-lg italic text-gray-300 leading-relaxed">
+            "This Bradley timepiece represents the peak era of radium dial production in post-war Germany. 
+            The sustained radioactivity after nearly 70 years demonstrates the enduring hazard of radium-226. 
+            Of particular note is the quality of the luminous application—still visibly glowing in darkness, 
+            a testament to both German craftsmanship and the permanent danger these artifacts pose."
+          </blockquote>
+          <p class="text-right mt-4 text-cyan-400">— Dr. R. Sanchez, Tangnet Field Science Lab</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Safety Information -->
+    <div class="mt-16 bg-red-950/50 border-2 border-red-500 rounded-xl p-8">
+      <h2 class="text-3xl font-bold mb-6 text-red-400 flex items-center">
+        <span class="text-4xl mr-4">⚠️</span>
+        Handling & Safety Protocols
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold text-red-300 mb-4">Required Precautions</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Never open case or disturb dial
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Store in ventilated area (radon gas emission)
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Limit handling time to under 5 minutes
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Maintain minimum 1-meter distance when not examining
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-red-300 mb-4">Storage Requirements</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Sealed display case with lead glass preferred
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Away from living/sleeping areas
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Document any paint flaking immediately
+            </li>
+            <li class="flex items-start">
+              <span class="text-red-400 mr-2">▸</span>
+              Annual radiation level monitoring recommended
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
 
-  <footer>
-    -- Tangnet Field Science Lab --
+  <!-- Footer -->
+  <footer class="mt-24 border-t border-gray-800 py-12">
+    <div class="container mx-auto px-6 text-center">
+      <div class="flex justify-center items-center space-x-2 mb-4">
+        <span class="text-2xl radium-glow">☢</span>
+        <span class="text-xl font-bold text-green-400">Tangnet Museum Collection</span>
+      </div>
+      <p class="text-gray-500">Preserving Radioactive Horological History</p>
+      <p class="text-sm text-gray-600 mt-4">Handle with Care • Store Safely • Respect the Past</p>
+    </div>
   </footer>
 </body>
 </html>

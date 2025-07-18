@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radium's Enduring Glow — Interactive Archive</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: "Courier New", monospace;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Matrix Rain Effect */
+    #matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.1;
+    }
+    
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 60px 0;
+      position: relative;
+    }
+    
+    .main-title {
+      font-size: 4em;
+      color: #00ffff;
+      text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+      letter-spacing: 4px;
+      animation: title-pulse 3s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes title-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .subtitle {
+      color: #ffcc00;
+      font-size: 1.2em;
+      opacity: 0.8;
+    }
+    
+    /* Navigation */
+    .nav-container {
+      position: sticky;
+      top: 0;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 40px 0;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    }
+    
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    
+    .nav-item {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00ff00;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .nav-item:hover {
+      background: rgba(0, 255, 0, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 255, 0, 0.5);
+    }
+    
+    .nav-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .nav-item:hover::before {
+      left: 100%;
+    }
+    
+    /* Sections */
+    .section {
+      margin: 60px 0;
+      padding: 40px;
+      background: rgba(10, 10, 10, 0.8);
+      border: 2px solid #00ff00;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section-title {
+      font-size: 2.5em;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .section-icon {
+      font-size: 1.2em;
+      animation: icon-spin 4s linear infinite;
+    }
+    
+    @keyframes icon-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Interactive Radium Decay Simulator */
+    .decay-simulator {
+      background: #000;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      position: relative;
+      min-height: 400px;
+    }
+    
+    #decay-canvas {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      background: radial-gradient(circle at center, rgba(0, 255, 0, 0.1), transparent);
+    }
+    
+    .control-panel {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .cyber-button {
+      background: linear-gradient(135deg, #00ff00, #00cc00);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cyber-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 255, 0, 0.8);
+    }
+    
+    .cyber-button:active {
+      transform: translateY(0);
+    }
+    
+    /* Interactive Timeline */
+    .timeline-container {
+      position: relative;
+      padding: 40px 0;
+      margin: 40px 0;
+    }
+    
+    .timeline-track {
+      position: relative;
+      height: 4px;
+      background: linear-gradient(90deg, #00ff00, #00ffff, #00ff00);
+      margin: 40px 0;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+    
+    .timeline-event {
+      position: absolute;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .timeline-marker {
+      width: 20px;
+      height: 20px;
+      background: #00ffff;
+      border: 3px solid #00ff00;
+      border-radius: 50%;
+      position: relative;
+      top: -8px;
+      box-shadow: 0 0 20px #00ffff;
+      animation: marker-pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes marker-pulse {
+      0%, 100% { box-shadow: 0 0 20px #00ffff; }
+      50% { box-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff; }
+    }
+    
+    .timeline-popup {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      padding: 20px;
+      min-width: 250px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+    
+    .timeline-event:hover .timeline-popup {
+      transform: translateX(-50%) scale(1);
+    }
+    
+    .timeline-year {
+      color: #00ffff;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .timeline-desc {
+      color: #00ff00;
+      line-height: 1.4;
+    }
+    
+    /* Radium Girls Memorial */
+    .memorial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    
+    .memorial-card {
+      background: rgba(255, 0, 0, 0.1);
+      border: 2px solid #ff3333;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .memorial-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(255, 0, 0, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .memorial-card:hover::before {
+      opacity: 1;
+    }
+    
+    .memorial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 51, 51, 0.5);
+    }
+    
+    .memorial-name {
+      color: #ff6666;
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #ff3333;
+    }
+    
+    /* Interactive Safety Checklist */
+    .safety-checklist {
+      background: rgba(255, 204, 0, 0.1);
+      border: 2px solid #ffcc00;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    
+    .checklist-item:hover {
+      background: rgba(255, 204, 0, 0.1);
+    }
+    
+    .checkbox {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #ffcc00;
+      border-radius: 5px;
+      margin-right: 20px;
+      position: relative;
+      transition: all 0.3s;
+    }
+    
+    .checkbox.checked {
+      background: #ffcc00;
+      box-shadow: 0 0 20px #ffcc00;
+    }
+    
+    .checkbox.checked::after {
+      content: "✓";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    
+    .checklist-text {
+      flex: 1;
+      font-size: 1.1em;
+    }
+    
+    /* Radiation Level Meter */
+    .radiation-meter {
+      background: #111;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: center;
+    }
+    
+    .meter-display {
+      font-size: 3em;
+      color: #00ff00;
+      text-shadow: 0 0 20px #00ff00;
+      font-family: "Courier New", monospace;
+      margin: 20px 0;
+    }
+    
+    .meter-bar {
+      width: 100%;
+      height: 30px;
+      background: #222;
+      border: 1px solid #00ff00;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+      width: 0%;
+      transition: width 2s ease-out;
+    }
+    
+    /* Warning Alerts */
+    .warning-alert {
+      background: rgba(255, 0, 0, 0.2);
+      border: 2px solid #ff0000;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      text-align: center;
+      animation: alert-flash 2s ease-in-out infinite;
+    }
+    
+    @keyframes alert-flash {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.8); }
+    }
+    
+    .warning-title {
+      color: #ff6666;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #ff0000;
+    }
+    
+    /* Code Blocks */
+    .code-block {
+      background: #000;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 20px 0;
+      font-family: "Courier New", monospace;
+      overflow-x: auto;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) inset;
+    }
+    
+    .code-line {
+      margin: 5px 0;
+      color: #00ff00;
+    }
+    
+    .code-comment {
+      color: #666;
+    }
+    
+    /* Particle Effects Container */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 60px 0;
+      border-top: 2px solid #00ff00;
+      margin-top: 100px;
+      color: #666;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-title { font-size: 2.5em; }
+      .section-title { font-size: 1.8em; }
+      .nav-grid { grid-template-columns: 1fr; }
+      .memorial-grid { grid-template-columns: 1fr; }
+    }
+    
+    /* Glitch Effect */
+    .glitch {
+      position: relative;
+      animation: glitch 2s infinite;
+    }
+    
+    @keyframes glitch {
+      0%, 100% { text-shadow: 0 0 20px #00ffff; }
+      20% { text-shadow: 3px 0 20px #ff0000, -3px 0 20px #00ff00; }
+      40% { text-shadow: -3px 0 20px #ff0000, 3px 0 20px #00ff00; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-bg"></canvas>
+  <canvas id="particles"></canvas>
+  
+  <div class="container">
+    <header class="header">
+      <h1 class="main-title glitch">☢️ RADIUM'S ENDURING GLOW ☢️</h1>
+      <p class="subtitle">An Interactive Journey Through Atomic History</p>
+    </header>
+    
+    <nav class="nav-container">
+      <div class="nav-grid">
+        <div class="nav-item" onclick="scrollToSection('discovery')">
+          <div>🔬 Discovery</div>
+        </div>
+        <div class="nav-item" onclick="scrollToSection('science')">
+          <div>⚛️ The Science</div>
+        </div>
+        <div class="nav-item" onclick="scrollToSection('industry')">
+          <div>🏭 Industry</div>
+        </div>
+        <div class="nav-item" onclick="scrollToSection('tragedy')">
+          <div>💀 Tragedy</div>
+        </div>
+        <div class="nav-item" onclick="scrollToSection('legacy')">
+          <div>📜 Legacy</div>
+        </div>
+        <div class="nav-item" onclick="scrollToSection('safety')">
+          <div>⚠️ Safety</div>
+        </div>
+      </div>
+    </nav>
+    
+    <section id="discovery" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">🔬</span>
+        The Dawn of Radioactivity
+      </h2>
+      
+      <div class="timeline-container">
+        <div class="timeline-track">
+          <div class="timeline-event" style="left: 10%;">
+            <div class="timeline-marker"></div>
+            <div class="timeline-popup">
+              <div class="timeline-year">1898</div>
+              <div class="timeline-desc">Marie & Pierre Curie discover radium in pitchblende</div>
+            </div>
+          </div>
+          <div class="timeline-event" style="left: 25%;">
+            <div class="timeline-marker"></div>
+            <div class="timeline-popup">
+              <div class="timeline-year">1902</div>
+              <div class="timeline-desc">One-tenth gram of pure radium chloride isolated from tons of pitchblende</div>
+            </div>
+          </div>
+          <div class="timeline-event" style="left: 40%;">
+            <div class="timeline-marker"></div>
+            <div class="timeline-popup">
+              <div class="timeline-year">1903</div>
+              <div class="timeline-desc">Marie Curie becomes first woman to win Nobel Prize</div>
+            </div>
+          </div>
+          <div class="timeline-event" style="left: 60%;">
+            <div class="timeline-marker"></div>
+            <div class="timeline-popup">
+              <div class="timeline-year">1911</div>
+              <div class="timeline-desc">Marie Curie wins second Nobel Prize for isolating pure radium</div>
+            </div>
+          </div>
+          <div class="timeline-event" style="left: 90%;">
+            <div class="timeline-marker"></div>
+            <div class="timeline-popup">
+              <div class="timeline-year">1934</div>
+              <div class="timeline-desc">Marie Curie dies from radiation exposure</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="code-block">
+        <div class="code-line">ELEMENT: Radium (Ra)</div>
+        <div class="code-line">ATOMIC_NUMBER: 88</div>
+        <div class="code-line">HALF_LIFE: 1,600 years</div>
+        <div class="code-line">DISCOVERY_YEAR: 1898</div>
+        <div class="code-line">RADIATION_TYPE: [Alpha, Beta, Gamma]</div>
+        <div class="code-line code-comment"># WARNING: Highly radioactive material</div>
+      </div>
+    </section>
+    
+    <section id="science" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">⚛️</span>
+        The Science of Radioluminescence
+      </h2>
+      
+      <div class="decay-simulator">
+        <canvas id="decay-canvas"></canvas>
+        <div class="control-panel">
+          <button class="cyber-button" onclick="startDecayAnimation()">Trigger Alpha Decay</button>
+          <button class="cyber-button" onclick="showDecayChain()">Show Decay Chain</button>
+          <button class="cyber-button" onclick="resetSimulation()">Reset Simulation</button>
+        </div>
+      </div>
+      
+      <div class="radiation-meter">
+        <h3>Live Radiation Level Simulation</h3>
+        <div class="meter-display" id="cpm-display">0 CPM</div>
+        <div class="meter-bar">
+          <div class="meter-fill" id="meter-fill"></div>
+        </div>
+        <p style="margin-top: 20px; color: #666;">Simulated Counts Per Minute (CPM)</p>
+      </div>
+    </section>
+    
+    <section id="industry" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">🏭</span>
+        The Radium Paint Industry
+      </h2>
+      
+      <div class="code-block">
+        <div class="code-line">// Radium Paint Recipe (Historical)</div>
+        <div class="code-line">const radiumPaint = {</div>
+        <div class="code-line">  radiumSalt: "Ra-226",</div>
+        <div class="code-line">  phosphor: "ZnS:Cu (Zinc Sulfide)",</div>
+        <div class="code-line">  binder: "Various adhesives",</div>
+        <div class="code-line">  glowColor: "#00ff00",</div>
+        <div class="code-line">  danger: "EXTREME"</div>
+        <div class="code-line">};</div>
+      </div>
+      
+      <div class="warning-alert">
+        <h3 class="warning-title">⚠️ INDUSTRIAL HAZARD ⚠️</h3>
+        <p>By 1918, 95% of all U.S. radium production was dedicated to luminous dial manufacturing</p>
+      </div>
+    </section>
+    
+    <section id="tragedy" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">💀</span>
+        The Radium Girls Tragedy
+      </h2>
+      
+      <div class="memorial-grid">
+        <div class="memorial-card">
+          <h3 class="memorial-name">Grace Fryer</h3>
+          <p>Led the legal battle against U.S. Radium Corporation. Her courage changed labor laws forever.</p>
+        </div>
+        <div class="memorial-card">
+          <h3 class="memorial-name">The Dial Painters</h3>
+          <p>Hundreds of young women poisoned by the "lip-pointing" technique. Their sacrifice saved countless lives.</p>
+        </div>
+        <div class="memorial-card">
+          <h3 class="memorial-name">Dr. Harrison Martland</h3>
+          <p>Pathologist who proved the link between radium and "radium jaw" in 1925.</p>
+        </div>
+      </div>
+      
+      <div class="warning-alert">
+        <h3 class="warning-title">THE DEADLY PRACTICE</h3>
+        <p>"Lip, Dip, Paint" - Workers ingested lethal amounts of radium daily</p>
+        <p>Management knew the dangers but concealed them for profit</p>
+      </div>
+    </section>
+    
+    <section id="legacy" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">📜</span>
+        Legacy & Modern Regulations
+      </h2>
+      
+      <div class="code-block">
+        <div class="code-line">// Luminous Material Evolution</div>
+        <div class="code-line">const materials = [</div>
+        <div class="code-line">  { name: "Radium-226", period: "1908-1960s", halfLife: "1600 years" },</div>
+        <div class="code-line">  { name: "Promethium-147", period: "1960s-1970s", halfLife: "2.6 years" },</div>
+        <div class="code-line">  { name: "Tritium (H-3)", period: "1960s-1990s", halfLife: "12.3 years" },</div>
+        <div class="code-line">  { name: "Strontium Aluminate", period: "1990s-Present", halfLife: "N/A (Non-radioactive)" }</div>
+        <div class="code-line">];</div>
+      </div>
+    </section>
+    
+    <section id="safety" class="section">
+      <h2 class="section-title">
+        <span class="section-icon">⚠️</span>
+        Collector Safety Protocol
+      </h2>
+      
+      <div class="safety-checklist">
+        <h3 style="color: #ffcc00; text-align: center; margin-bottom: 30px;">Interactive Safety Checklist</h3>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Keep clocks intact - never open cases or remove dials</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Store in well-ventilated areas to prevent radon accumulation</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Maintain safe distance - no bedroom or prolonged proximity storage</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Use gloves when handling and wash hands thoroughly</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Monitor with Geiger counter if collection exceeds 5 items</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="checkbox"></div>
+          <div class="checklist-text">Contact professionals for any damaged or flaking dials</div>
+        </div>
+      </div>
+      
+      <div class="warning-alert">
+        <h3 class="warning-title">REMEMBER: RADIUM NEVER SLEEPS</h3>
+        <p>Your 70-year-old radium clock is still 99.97% as radioactive as the day it was made!</p>
+      </div>
+    </section>
+    
+    <footer class="footer">
+      <p>— TANGNET INTERACTIVE MUSEUM ARCHIVE —</p>
+      <p>Handle with Care • Store Safely • Respect the Past</p>
+    </footer>
+  </div>
+  
+  <script>
+    // Matrix Rain Effect
+    const matrixCanvas = document.getElementById('matrix-bg');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    
+    const matrix = "☢⚛☣⚡⚠✓◆◇○●□■△▽";
+    const matrixArray = matrix.split("");
+    const fontSize = 16;
+    const columns = matrixCanvas.width / fontSize;
+    const drops = [];
+    
+    for(let x = 0; x < columns; x++) {
+      drops[x] = Math.random() * -100;
+    }
+    
+    function drawMatrix() {
+      matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      
+      matrixCtx.fillStyle = '#00ff00';
+      matrixCtx.font = fontSize + 'px monospace';
+      
+      for(let i = 0; i < drops.length; i++) {
+        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+        matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if(drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    
+    setInterval(drawMatrix, 35);
+    
+    // Smooth Scrolling
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    // Particle Effects
+    const particleCanvas = document.getElementById('particles');
+    const particleCtx = particleCanvas.getContext('2d');
+    
+    particleCanvas.width = window.innerWidth;
+    particleCanvas.height = window.innerHeight;
+    
+    const particles = [];
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        this.color = Math.random() > 0.5 ? '#00ff00' : '#00ffff';
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x > particleCanvas.width) this.x = 0;
+        if (this.x < 0) this.x = particleCanvas.width;
+        if (this.y > particleCanvas.height) this.y = 0;
+        if (this.y < 0) this.y = particleCanvas.height;
+      }
+      
+      draw() {
+        particleCtx.fillStyle = this.color;
+        particleCtx.shadowBlur = 10;
+        particleCtx.shadowColor = this.color;
+        particleCtx.beginPath();
+        particleCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        particleCtx.fill();
+      }
+    }
+    
+    function initParticles() {
+      for (let i = 0; i < 50; i++) {
+        particles.push(new Particle());
+      }
+    }
+    
+    function animateParticles() {
+      particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    
+    initParticles();
+    animateParticles();
+    
+    // Decay Simulator
+    const decayCanvas = document.getElementById('decay-canvas');
+    const decayCtx = decayCanvas.getContext('2d');
+    
+    decayCanvas.width = decayCanvas.offsetWidth;
+    decayCanvas.height = 300;
+    
+    function drawAtom(x, y, label, color) {
+      decayCtx.fillStyle = color;
+      decayCtx.shadowBlur = 20;
+      decayCtx.shadowColor = color;
+      decayCtx.beginPath();
+      decayCtx.arc(x, y, 30, 0, Math.PI * 2);
+      decayCtx.fill();
+      
+      decayCtx.fillStyle = '#fff';
+      decayCtx.font = '14px monospace';
+      decayCtx.textAlign = 'center';
+      decayCtx.fillText(label, x, y + 5);
+    }
+    
+    function startDecayAnimation() {
+      decayCtx.clearRect(0, 0, decayCanvas.width, decayCanvas.height);
+      
+      // Draw initial radium atom
+      drawAtom(100, 150, 'Ra-226', '#0066ff');
+      
+      // Animate alpha particle emission
+      let alphaX = 100;
+      let alphaY = 150;
+      
+      const animateAlpha = () => {
+        decayCtx.clearRect(0, 0, decayCanvas.width, decayCanvas.height);
+        drawAtom(100, 150, 'Rn-222', '#9933ff');
+        
+        alphaX += 5;
+        alphaY -= 1;
+        
+        decayCtx.fillStyle = '#ffff00';
+        decayCtx.shadowBlur = 15;
+        decayCtx.shadowColor = '#ffff00';
+        decayCtx.beginPath();
+        decayCtx.arc(alphaX, alphaY, 10, 0, Math.PI * 2);
+        decayCtx.fill();
+        
+        if (alphaX < 400) {
+          requestAnimationFrame(animateAlpha);
+        } else {
+          // Draw phosphor interaction
+          drawAtom(400, 150, 'ZnS', '#00ff00');
+          setTimeout(() => {
+            // Flash effect
+            decayCtx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+            decayCtx.fillRect(350, 100, 100, 100);
+          }, 500);
+        }
+      };
+      
+      animateAlpha();
+    }
+    
+    function showDecayChain() {
+      decayCtx.clearRect(0, 0, decayCanvas.width, decayCanvas.height);
+      
+      const chain = [
+        { element: 'Ra-226', x: 100, y: 150 },
+        { element: 'Rn-222', x: 250, y: 150 },
+        { element: 'Po-218', x: 400, y: 150 },
+        { element: 'Pb-214', x: 550, y: 150 },
+        { element: 'Bi-214', x: 700, y: 150 }
+      ];
+      
+      chain.forEach((item, index) => {
+        setTimeout(() => {
+          drawAtom(item.x, item.y, item.element, `hsl(${index * 60}, 100%, 50%)`);
+          
+          if (index > 0) {
+            decayCtx.strokeStyle = '#00ff00';
+            decayCtx.lineWidth = 2;
+            decayCtx.beginPath();
+            decayCtx.moveTo(chain[index-1].x + 30, chain[index-1].y);
+            decayCtx.lineTo(item.x - 30, item.y);
+            decayCtx.stroke();
+          }
+        }, index * 300);
+      });
+    }
+    
+    function resetSimulation() {
+      decayCtx.clearRect(0, 0, decayCanvas.width, decayCanvas.height);
+      decayCtx.fillStyle = '#00ff00';
+      decayCtx.font = '20px monospace';
+      decayCtx.textAlign = 'center';
+      decayCtx.fillText('Click a button to start simulation', decayCanvas.width / 2, decayCanvas.height / 2);
+    }
+    
+    resetSimulation();
+    
+    // Radiation Meter Simulation
+    let cpmInterval;
+    
+    function updateRadiationMeter() {
+      const baseCPM = 15;
+      const radiumCPM = Math.floor(Math.random() * 200) + 600;
+      const currentCPM = Math.floor(Math.random() * (radiumCPM - baseCPM)) + baseCPM;
+      
+      document.getElementById('cpm-display').textContent = currentCPM + ' CPM';
+      
+      const percentage = (currentCPM / 1000) * 100;
+      document.getElementById('meter-fill').style.width = percentage + '%';
+      
+      // Change color based on level
+      const meterFill = document.getElementById('meter-fill');
+      if (currentCPM < 50) {
+        meterFill.style.background = '#00ff00';
+      } else if (currentCPM < 200) {
+        meterFill.style.background = '#ffff00';
+      } else {
+        meterFill.style.background = '#ff0000';
+      }
+    }
+    
+    // Start radiation meter updates
+    setInterval(updateRadiationMeter, 1000);
+    
+    // Interactive Checklist
+    function toggleCheck(item) {
+      const checkbox = item.querySelector('.checkbox');
+      checkbox.classList.toggle('checked');
+      
+      // Check if all items are checked
+      const allChecked = document.querySelectorAll('.checkbox.checked').length === 6;
+      if (allChecked) {
+        setTimeout(() => {
+          alert('✅ Excellent! You are following proper safety protocols for radium clock collecting.');
+        }, 500);
+      }
+    }
+    
+    // Window resize handlers
+    window.addEventListener('resize', () => {
+      matrixCanvas.width = window.innerWidth;
+      matrixCanvas.height = window.innerHeight;
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+      decayCanvas.width = decayCanvas.offsetWidth;
+    });
+    
+    // Add glow effect to sections on scroll
+    const sections = document.querySelectorAll('.section');
+    const observerOptions = {
+      threshold: 0.3
+    };
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.boxShadow = '0 0 50px rgba(0, 255, 0, 0.5)';
+        } else {
+          entry.target.style.boxShadow = 'none';
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+      sectionObserver.observe(section);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radium's Enduring Glow: A Museum Exhibition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --deep-black: #0A0A0A;
+            --warm-gray: #2D2D2D;
+            --light-gray: #F5F5F0;
+            --danger-red: #DC143C;
+            --radium-green: #39FF14;
+            --warning-amber: #FFA500;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--warm-gray);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .typewriter {
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        /* Subtle glow effect for radioactive elements */
+        .radium-glow {
+            animation: subtle-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes subtle-glow {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(57, 255, 20, 0.3)); }
+            50% { filter: drop-shadow(0 0 8px rgba(57, 255, 20, 0.6)); }
+        }
+        
+        /* Navigation styling */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            color: var(--warm-gray);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        /* Timeline styling */
+        .timeline-dot {
+            position: relative;
+            width: 16px;
+            height: 16px;
+            background-color: var(--primary-gold);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-dot:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+        
+        /* Chart container styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Safety badge styling */
+        .safety-badge {
+            background: linear-gradient(135deg, var(--warning-amber), #FF8C00);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Interactive elements */
+        .interactive-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        /* Loading animation for canvas */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            80%, 100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8941F;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header with elegant museum styling -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl radium-glow">☢</span>
+                    <span class="font-bold text-gray-800">Tangnet Museum</span>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="#introduction" class="nav-link font-medium">Introduction</a></li>
+                    <li><a href="#discovery" class="nav-link font-medium">Discovery</a></li>
+                    <li><a href="#science" class="nav-link font-medium">Science</a></li>
+                    <li><a href="#industry" class="nav-link font-medium">Industry</a></li>
+                    <li><a href="#tragedy" class="nav-link font-medium">Tragedy</a></li>
+                    <li><a href="#legacy" class="nav-link font-medium">Legacy</a></li>
+                    <li><a href="#safety" class="nav-link font-medium">Safety</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-b from-gray-900 to-black text-white py-32 overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 animate-pulse"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">
+                Radium's Enduring Glow
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                A Historical and Scientific Examination of Luminous Clocks and Collector Safety
+            </p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <span class="safety-badge">1,600 Year Half-Life</span>
+                <span class="safety-badge">Still Radioactive Today</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 py-12">
+        <!-- Introduction Section -->
+        <section id="introduction" class="mb-24">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-8 text-gray-900">The Allure of the Luminous Dial</h2>
+                <div class="prose prose-lg max-w-none">
+                    <p class="lead text-xl text-gray-700 mb-6">
+                        Radium clocks represent a fascinating intersection of scientific discovery, industrial innovation, 
+                        and profound human tragedy. These timepieces, once symbols of modernity, allowed individuals to 
+                        read time in darkness—a feature particularly vital during World War I.
+                    </p>
+                    <div class="bg-amber-50 border-l-4 border-amber-400 p-6 my-8">
+                        <p class="text-gray-800 italic">
+                            "For collectors of vintage radium clocks, understanding this history is paramount. It enriches 
+                            appreciation while providing essential knowledge for safe handling, storage, and display."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discovery Section with Timeline -->
+        <section id="discovery" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">The Dawn of Radioactivity</h2>
+            
+            <!-- Interactive Timeline -->
+            <div class="relative max-w-6xl mx-auto mb-16">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-300"></div>
+                
+                <div class="space-y-12">
+                    <!-- Timeline Event 1 -->
+                    <div class="relative flex items-center justify-between">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-gray-900">1898</h3>
+                            <p class="text-gray-600 mt-2">Marie & Pierre Curie discover radium and polonium in pitchblende</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                        <div class="w-5/12 pl-8">
+                            <div class="bg-white p-4 rounded-lg shadow-md interactive-card">
+                                <p class="text-sm text-gray-500">A groundbreaking discovery that would reshape science</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Event 2 -->
+                    <div class="relative flex items-center justify-between">
+                        <div class="w-5/12 text-right pr-8">
+                            <div class="bg-white p-4 rounded-lg shadow-md interactive-card">
+                                <p class="text-sm text-gray-500">Monumental achievement in chemistry</p>
+                            </div>
+                        </div>
+                        <div class="timeline-dot"></div>
+                        <div class="w-5/12 pl-8">
+                            <h3 class="text-2xl font-bold text-gray-900">1902</h3>
+                            <p class="text-gray-600 mt-2">One-tenth gram of pure radium chloride isolated from tons of pitchblende</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Event 3 -->
+                    <div class="relative flex items-center justify-between">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-gray-900">1903</h3>
+                            <p class="text-gray-600 mt-2">Marie Curie becomes first woman to win Nobel Prize</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                        <div class="w-5/12 pl-8">
+                            <div class="bg-white p-4 rounded-lg shadow-md interactive-card">
+                                <p class="text-sm text-gray-500">Nobel Prize in Physics with Pierre Curie and Henri Becquerel</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Event 4 -->
+                    <div class="relative flex items-center justify-between">
+                        <div class="w-5/12 text-right pr-8">
+                            <div class="bg-white p-4 rounded-lg shadow-md interactive-card">
+                                <p class="text-sm text-gray-500">First person to win two Nobel Prizes</p>
+                            </div>
+                        </div>
+                        <div class="timeline-dot"></div>
+                        <div class="w-5/12 pl-8">
+                            <h3 class="text-2xl font-bold text-gray-900">1911</h3>
+                            <p class="text-gray-600 mt-2">Second Nobel Prize for isolating pure metallic radium</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Event 5 -->
+                    <div class="relative flex items-center justify-between">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-gray-900">1934</h3>
+                            <p class="text-gray-600 mt-2">Marie Curie dies from radiation exposure</p>
+                        </div>
+                        <div class="timeline-dot bg-red-600"></div>
+                        <div class="w-5/12 pl-8">
+                            <div class="bg-red-50 p-4 rounded-lg shadow-md">
+                                <p class="text-sm text-red-700">A tragic end that foreshadowed the dangers ahead</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Early Commercial Products -->
+            <div class="bg-gray-100 rounded-xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-gray-900">The Era of Radium Optimism</h3>
+                <p class="text-gray-700 mb-6">
+                    Following its discovery, radium was perceived as a miracle substance with beneficial health properties, 
+                    leading to its incorporation into numerous consumer products:
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">🦷</span>
+                        <p class="text-sm font-medium">Radium Toothpaste</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">💧</span>
+                        <p class="text-sm font-medium">Revigator Water</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">💊</span>
+                        <p class="text-sm font-medium">Radium Suppositories</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">🍫</span>
+                        <p class="text-sm font-medium">Radium Chocolates</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">💄</span>
+                        <p class="text-sm font-medium">Hair Creams</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <span class="text-3xl mb-2 block">🥤</span>
+                        <p class="text-sm font-medium">Food Items</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Science Section -->
+        <section id="science" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">The Science of Radioluminescence</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Interactive Decay Simulator -->
+                <div class="bg-gray-900 rounded-xl p-6 text-white">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Radium Decay Simulation</h3>
+                    <div class="relative bg-black rounded-lg overflow-hidden" style="height: 300px;">
+                        <canvas id="decayCanvas"></canvas>
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <button onclick="simulateDecay()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Simulate Alpha Decay
+                        </button>
+                        <button onclick="resetDecaySimulation()" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Reset Simulation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- How It Works -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900">The Mechanism</h3>
+                    <ol class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">1</span>
+                            <span>Radium-226 atom undergoes radioactive decay</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">2</span>
+                            <span>Emits alpha particle (helium nucleus)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">3</span>
+                            <span>Particle travels through paint mixture</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">4</span>
+                            <span>Collides with zinc sulfide crystal</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">5</span>
+                            <span>Electrons excited, then release photons</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-gold text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5" style="background-color: var(--primary-gold);">6</span>
+                            <span>Millions of flashes create continuous glow</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Critical Warning -->
+            <div class="mt-12 bg-red-50 border-2 border-red-200 rounded-xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-red-800 mb-4 flex items-center">
+                    <span class="text-3xl mr-3">⚠️</span>
+                    Critical Safety Information
+                </h3>
+                <p class="text-red-700 text-lg">
+                    <strong>A non-glowing clock is STILL RADIOACTIVE!</strong> The loss of luminosity is due to 
+                    phosphor degradation, NOT radium decay. The radium remains as dangerous as when first applied.
+                </p>
+            </div>
+
+            <!-- Paint Composition -->
+            <div class="mt-12 bg-gray-900 text-white rounded-xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6">Radium Paint Composition</h3>
+                <div class="typewriter bg-black p-6 rounded-lg overflow-x-auto">
+                    <pre class="text-green-400">
+{
+  "components": {
+    "radiumSalt": "Radium-226 (Ra)",
+    "phosphor": "Zinc Sulfide (ZnS:Cu)",
+    "binder": "Various adhesives",
+    "glowColor": "#39FF14",
+    "halfLife": "1,600 years",
+    "danger": "EXTREME"
+  }
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industry Section -->
+        <section id="industry" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">The Radium Paint Industry</h2>
+            
+            <!-- Production Timeline Chart -->
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">Radium Production Timeline</h3>
+                <div class="chart-container" style="height: 400px;">
+                    <canvas id="productionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Key Statistics -->
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 text-center">
+                    <div class="text-5xl font-black mb-2">95%</div>
+                    <p class="text-lg">of U.S. radium used for military dials during WWI</p>
+                </div>
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 text-center">
+                    <div class="text-5xl font-black mb-2">1916</div>
+                    <p class="text-lg">Ingersoll "Radiolite" watches enter mass market</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+                    <div class="text-5xl font-black mb-2">1960s</div>
+                    <p class="text-lg">Radium finally phased out of production</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tragedy Section -->
+        <section id="tragedy" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">The Human Cost: The Radium Girls</h2>
+            
+            <!-- Memorial Cards -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
+                <div class="bg-black text-white rounded-xl p-8 shadow-2xl">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Grace Fryer</h3>
+                    <p class="text-gray-300 mb-6">
+                        Led the landmark legal battle against U.S. Radium Corporation. Her courage in the face of 
+                        corporate deception changed labor laws and saved countless lives.
+                    </p>
+                    <blockquote class="border-l-4 border-yellow-400 pl-4 italic">
+                        "It is not for myself I care. I am thinking more of the hundreds of girls to whom this may serve as an example."
+                    </blockquote>
+                </div>
+
+                <div class="bg-gradient-to-br from-red-900 to-red-800 text-white rounded-xl p-8 shadow-2xl">
+                    <h3 class="text-2xl font-bold mb-4">The Deadly Practice</h3>
+                    <div class="space-y-4">
+                        <div class="bg-red-800/50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Lip-Pointing Technique</h4>
+                            <p class="text-sm">Workers licked brushes to maintain fine tips, ingesting radium daily</p>
+                        </div>
+                        <div class="bg-red-800/50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Corporate Deception</h4>
+                            <p class="text-sm">Management used protective equipment while denying risks to workers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Effects Comparison Chart -->
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">Radium Exposure: Safe Limit vs. Reality</h3>
+                <div class="chart-container" style="height: 350px;">
+                    <canvas id="exposureChart"></canvas>
+                </div>
+                <p class="text-center text-gray-600 mt-4 text-sm">
+                    * Logarithmic scale showing the devastating difference between "safe" limits and actual exposure
+                </p>
+            </div>
+        </section>
+
+        <!-- Legacy Section -->
+        <section id="legacy" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">Evolution of Luminous Materials</h2>
+            
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="text-left py-4 px-6 font-bold text-gray-900">Material</th>
+                                <th class="text-left py-4 px-6 font-bold text-gray-900">Type</th>
+                                <th class="text-left py-4 px-6 font-bold text-gray-900">Half-Life</th>
+                                <th class="text-left py-4 px-6 font-bold text-gray-900">Safety</th>
+                                <th class="text-left py-4 px-6 font-bold text-gray-900">Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="py-4 px-6 font-medium">Radium-226</td>
+                                <td class="py-4 px-6">α, β, γ radiation</td>
+                                <td class="py-4 px-6">1,600 years</td>
+                                <td class="py-4 px-6"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">Highly Hazardous</span></td>
+                                <td class="py-4 px-6">1900s-1960s</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="py-4 px-6 font-medium">Promethium-147</td>
+                                <td class="py-4 px-6">β radiation</td>
+                                <td class="py-4 px-6">2.6 years</td>
+                                <td class="py-4 px-6"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">Moderate Risk</span></td>
+                                <td class="py-4 px-6">1960s-1970s</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="py-4 px-6 font-medium">Tritium (H-3)</td>
+                                <td class="py-4 px-6">Low-energy β</td>
+                                <td class="py-4 px-6">12.3 years</td>
+                                <td class="py-4 px-6"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">Lower Risk</span></td>
+                                <td class="py-4 px-6">1960s-1990s</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="py-4 px-6 font-medium">Strontium Aluminate</td>
+                                <td class="py-4 px-6">Photoluminescent</td>
+                                <td class="py-4 px-6">N/A</td>
+                                <td class="py-4 px-6"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Non-radioactive</span></td>
+                                <td class="py-4 px-6">1990s-Present</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Regulatory Timeline -->
+            <div class="mt-12 bg-gray-100 rounded-xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-gray-900">Regulatory Evolution</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="bg-gray-300 w-4 h-4 rounded-full mt-1.5 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Early 1900s</h4>
+                            <p class="text-gray-600">Fragmented state-level regulations, minimal oversight</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-yellow-500 w-4 h-4 rounded-full mt-1.5 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">2005</h4>
+                            <p class="text-gray-600">Energy Policy Act grants NRC authority over radium-226</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-green-500 w-4 h-4 rounded-full mt-1.5 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">2009</h4>
+                            <p class="text-gray-600">NRC assumes full federal oversight of radium materials</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Section -->
+        <section id="safety" class="mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">Collector Safety Guidelines</h2>
+
+            <!-- Primary Risks -->
+            <div class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">☢️</span>
+                        <h3 class="text-xl font-bold text-red-800">Flaking Paint</h3>
+                    </div>
+                    <p class="text-red-700">Most dangerous risk - inhalation or ingestion of radioactive dust</p>
+                </div>
+
+                <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">💨</span>
+                        <h3 class="text-xl font-bold text-amber-800">Radon Gas</h3>
+                    </div>
+                    <p class="text-amber-700">Invisible radioactive gas accumulates in enclosed spaces</p>
+                </div>
+
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">〰️</span>
+                        <h3 class="text-xl font-bold text-purple-800">Gamma Radiation</h3>
+                    </div>
+                    <p class="text-purple-700">Penetrating radiation passes through clock casing</p>
+                </div>
+            </div>
+
+            <!-- Interactive Safety Checklist -->
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">Essential Safety Checklist</h3>
+                <div class="space-y-4" id="safetyChecklist">
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Keep clocks intact - never disassemble</span>
+                    </label>
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Ensure good ventilation in display areas</span>
+                    </label>
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Keep away from living and sleeping areas</span>
+                    </label>
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Handle minimally with gloves</span>
+                    </label>
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Use Geiger counter for monitoring</span>
+                    </label>
+                    <label class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                        <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500 mr-4">
+                        <span class="text-gray-700">Contact professionals for damaged items</span>
+                    </label>
+                </div>
+                <div id="safetyMessage" class="mt-6 text-center hidden">
+                    <p class="text-green-600 font-semibold">✅ Excellent! You're following proper safety protocols.</p>
+                </div>
+            </div>
+
+            <!-- Final Warning -->
+            <div class="mt-12 bg-black text-white rounded-xl p-8 max-w-4xl mx-auto text-center">
+                <h3 class="text-3xl font-bold mb-4 text-yellow-400">Remember: Radium Never Sleeps</h3>
+                <p class="text-xl">
+                    Your 70-year-old radium clock is still <span class="text-yellow-400 font-bold">99.97%</span> as radioactive 
+                    as the day it was manufactured.
+                </p>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section class="mb-24">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8 text-gray-900">Preserving History Responsibly</h2>
+                <p class="text-xl text-gray-700 mb-8">
+                    Radium clocks stand as poignant reminders of scientific brilliance intertwined with human tragedy. 
+                    As collectors, we become custodians not just of timepieces, but of a profound historical lesson.
+                </p>
+                <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl p-8">
+                    <p class="text-lg italic mb-4">
+                        "Those who cannot remember the past are condemned to repeat it."
+                    </p>
+                    <p class="text-sm">— George Santayana</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center space-x-2 mb-4">
+                <span class="text-2xl radium-glow">☢</span>
+                <span class="text-xl font-bold">Tangnet Museum Archive</span>
+            </div>
+            <p class="text-gray-400">Radium Clock History Project</p>
+            <p class="text-sm text-gray-500 mt-4">Handle with Care • Store Safely • Respect the Past</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update active nav link on scroll
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Decay Canvas Setup
+            const decayCanvas = document.getElementById('decayCanvas');
+            const ctx = decayCanvas.getContext('2d');
+            
+            function resizeCanvas() {
+                decayCanvas.width = decayCanvas.parentElement.offsetWidth;
+                decayCanvas.height = 300;
+                drawInitialState();
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function drawInitialState() {
+                ctx.clearRect(0, 0, decayCanvas.width, decayCanvas.height);
+                
+                // Draw radium atom
+                ctx.fillStyle = '#4169E1';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#4169E1';
+                ctx.beginPath();
+                ctx.arc(80, 150, 30, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 0;
+                ctx.fillText('Ra-226', 80, 155);
+                
+                // Draw phosphor
+                ctx.fillStyle = '#39FF14';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#39FF14';
+                ctx.beginPath();
+                ctx.arc(decayCanvas.width - 80, 150, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = 'black';
+                ctx.shadowBlur = 0;
+                ctx.fillText('ZnS', decayCanvas.width - 80, 155);
+            }
+            
+            window.simulateDecay = function() {
+                let alpha = { x: 80, y: 150 };
+                const targetX = decayCanvas.width - 80;
+                const targetY = 150;
+                const speed = 4;
+                
+                function animate() {
+                    drawInitialState();
+                    
+                    // Update alpha position
+                    alpha.x += speed;
+                    
+                    // Draw alpha particle
+                    ctx.fillStyle = '#FFD700';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#FFD700';
+                    ctx.beginPath();
+                    ctx.arc(alpha.x, alpha.y, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    if (alpha.x < targetX - 35) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        // Flash effect
+                        for (let i = 0; i < 3; i++) {
+                            setTimeout(() => {
+                                ctx.fillStyle = 'rgba(57, 255, 20, 0.3)';
+                                ctx.fillRect(0, 0, decayCanvas.width, decayCanvas.height);
+                                setTimeout(() => drawInitialState(), 100);
+                            }, i * 200);
+                        }
+                    }
+                }
+                
+                animate();
+            };
+            
+            window.resetDecaySimulation = function() {
+                drawInitialState();
+            };
+
+            // Production Timeline Chart
+            const productionCtx = document.getElementById('productionChart').getContext('2d');
+            new Chart(productionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1900', '1910', '1920', '1930', '1940', '1950', '1960', '1970'],
+                    datasets: [{
+                        label: 'Radium Paint Production (Relative Scale)',
+                        data: [5, 15, 85, 95, 70, 40, 10, 2],
+                        borderColor: '#39FF14',
+                        backgroundColor: 'rgba(57, 255, 20, 0.1)',
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#39FF14',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const year = context.label;
+                                    const events = {
+                                        '1920': 'Peak of Radium Girls era',
+                                        '1930': 'Legal battles begin',
+                                        '1940': 'WWII increases demand',
+                                        '1960': 'Transition to safer materials'
+                                    };
+                                    return events[year] || '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Production Level'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Exposure Comparison Chart
+            const exposureCtx = document.getElementById('exposureChart').getContext('2d');
+            new Chart(exposureCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Hypothetical "Safe" Limit', 'Dial Painter Daily Intake'],
+                    datasets: [{
+                        label: 'Radium Intake (micrograms)',
+                        data: [0.1, 400],
+                        backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)'],
+                        borderColor: ['rgb(34, 197, 94)', 'rgb(239, 68, 68)'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' µg/day';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Daily Intake (µg) - Log Scale'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' µg';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Safety Checklist Interaction
+            const checkboxes = document.querySelectorAll('#safetyChecklist input[type="checkbox"]');
+            const safetyMessage = document.getElementById('safetyMessage');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    if (allChecked) {
+                        safetyMessage.classList.remove('hidden');
+                    } else {
+                        safetyMessage.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

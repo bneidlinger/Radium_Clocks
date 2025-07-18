@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Glowing Hands of Time: Radium Dials</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Vintage Glow -->
+    <!-- Application Structure Plan: The application is structured as a narrative journey, designed to guide the user from scientific discovery to historical application, human impact, and finally to the modern legacy. This thematic, single-page scrolling structure is more engaging than a simple report. It begins with a hook (The Science), moves to historical context (The Age of Radium), deepens the story with the human element (The Radium Girls), explains the process (The Luminous Dial), and concludes with practical information for the collector (Legacy & Safety). A sticky navigation allows users to jump between these themes, facilitating non-linear exploration while maintaining a clear narrative flow. This structure was chosen to make a complex topic digestible and engaging for a collector who appreciates the story behind the artifacts. -->
+    <!-- Visualization & Content Choices: 
+        1. Radium Decay Simulation: Report Info -> How radioluminescence works. Goal -> Inform/Explain. Viz -> Interactive Canvas Animation. Interaction -> User clicks a button to trigger a simulated decay event (alpha particle hitting phosphor). Justification -> Visually demonstrates the abstract physical process, making it intuitive. Library/Method -> Vanilla JS Canvas API.
+        2. Radium Timeline: Report Info -> Key dates in radium's history. Goal -> Show Change. Viz -> Horizontal Bar Chart (used as a timeline). Interaction -> Hovering on bars shows tooltips with more detail. Justification -> Provides a clear chronological overview of radium's rise and fall. Library/Method -> Chart.js.
+        3. Worker Exposure: Report Info -> Health impact on dial painters. Goal -> Compare. Viz -> Vertical Bar Chart. Interaction -> Static chart for immediate visual impact. Justification -> A stark, simple comparison of safe vs. actual exposure levels effectively communicates the danger. Library/Method -> Chart.js.
+        4. Luminous Paint Recipe: Report Info -> Composition of the paint. Goal -> Organize/Inform. Viz -> Styled HTML/CSS diagram. Interaction -> Static. Justification -> A simple, clear visual breakdown is more effective than a block of text. Library/Method -> HTML/Tailwind.
+        5. Safety Checklist: Report Info -> Collector safety guidelines. Goal -> Inform. Viz -> Styled HTML list. Interaction -> Static. Justification -> A checklist is the most scannable and actionable format for safety advice. Library/Method -> HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #FDFBF6;
+            color: #404040;
+        }
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .glow-text {
+            text-shadow: 0 0 8px rgba(185, 255, 153, 0.7), 0 0 10px rgba(185, 255, 153, 0.7);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #588157;
+            border-bottom-color: #588157;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 800px;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center space-x-4 md:space-x-8 text-sm md:text-base">
+                <li><a href="#science" class="nav-link font-semibold p-2">The Science</a></li>
+                <li><a href="#history" class="nav-link font-semibold p-2">History</a></li>
+                <li><a href="#workers" class="nav-link font-semibold p-2">The Radium Girls</a></li>
+                <li><a href="#legacy" class="nav-link font-semibold p-2">Legacy & Safety</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16 space-y-24">
+        
+        <section id="intro" class="text-center">
+            <h1 class="text-5xl md:text-7xl font-bold text-gray-800">The Glowing Hands of Time</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">An interactive exploration of radium's luminous and dark history in watchmaking.</p>
+        </section>
+
+        <section id="science" class="space-y-8">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold">The Science of the Glow</h2>
+                <p class="mt-2 text-gray-600 max-w-2xl mx-auto">The captivating glow of early 20th-century clocks was not magic, but a fascinating and dangerous dance of physics. At its heart was Radium-226, an element discovered by Marie and Pierre Curie in 1898. This section explores the mechanism of radioluminescence, the process that made these timepieces shine in the dark.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">How Radioluminescence Works</h3>
+                    <p class="mb-4">Radium itself does not glow. The light is produced when a particle emitted by a decaying radium atom strikes a phosphor material, typically zinc sulfide ($ZnS$).</p>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>A Radium-226 ($^{226}Ra$) atom is unstable and undergoes radioactive decay.</li>
+                        <li>It emits an alpha particle (a helium nucleus).</li>
+                        <li>This high-energy particle travels through the paint mixture.</li>
+                        <li>It collides with a crystal of zinc sulfide ($ZnS$), exciting its electrons.</li>
+                        <li>As the electrons return to their normal state, they release energy as a tiny flash of light (a photon).</li>
+                    </ol>
+                    <p class="mt-4">Millions of these flashes per second create the steady, continuous glow seen on the dial.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl text-white">
+                     <h3 class="text-2xl font-semibold mb-4 text-center">Interactive Decay Simulation</h3>
+                     <div class="relative w-full h-64 rounded-md bg-black overflow-hidden border-2 border-green-400/50">
+                        <canvas id="decayCanvas"></canvas>
+                     </div>
+                     <button id="simulateButton" class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+                        Simulate Alpha Decay
+                     </button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="history" class="space-y-8">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold">The Age of Radium</h2>
+                <p class="mt-2 text-gray-600 max-w-2xl mx-auto">Following its discovery, radium was hailed as a miracle element. Its mysterious energy and constant glow captured the public imagination. For several decades, it was added to everything from toothpaste to drinking water, and most famously, to paint for creating luminous dials on clocks and aircraft instruments, seen as a revolutionary innovation for visibility in the dark.</p>
+            </div>
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md border border-gray-200">
+                <h3 class="text-2xl font-semibold mb-4 text-center text-gray-800">Timeline of Radium Dial Production</h3>
+                <div class="chart-container">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="workers" class="space-y-8">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold">The Radium Girls</h2>
+                <p class="mt-2 text-gray-600 max-w-2xl mx-auto">The story behind the glowing dials has a dark side. The paint was applied by hand, mostly by young women. To get a fine point on their brushes, they were instructed to use the "lip, dip, point" technique—a practice that led them to ingest deadly amounts of radium. Their subsequent fight for justice fundamentally changed labor laws and our understanding of radioactivity.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-4 text-center text-gray-800">Exposure: Safe Limit vs. Dial Painter</h3>
+                    <p class="text-sm text-center text-gray-500 mb-4">This chart shows a conservative estimate of the daily radium intake for a dial painter compared to what might be considered a "safe" limit at the time (though no amount is truly safe). The painters ingested thousands of times the acceptable amount.</p>
+                     <div class="chart-container" style="height: 350px;">
+                        <canvas id="exposureChart"></canvas>
+                    </div>
+                </div>
+                <div class="md:col-span-2 text-gray-700">
+                    <blockquote class="border-l-4 border-amber-500 pl-4 py-2 italic text-lg bg-amber-50 rounded-r-lg">
+                        "It is not for myself I care. I am thinking more of the hundreds of girls to whom this may serve as an example."
+                    </blockquote>
+                    <p class="text-right mt-2 text-gray-600 font-semibold">- Grace Fryer, one of the original Radium Girls</p>
+                    <div class="mt-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h4 class="font-bold text-lg text-gray-800">The Chemical Deception</h4>
+                        <p class="mt-2">Radium is chemically similar to calcium. When ingested, the body mistakes it for calcium and deposits it in the bones. There, its continuous radioactive decay destroys bone tissue from the inside out, leading to horrific conditions like "radium jaw" (severe bone necrosis) and fatal cancers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="legacy" class="space-y-8">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold">Legacy & Collector Safety</h2>
+                <p class="mt-2 text-gray-600 max-w-2xl mx-auto">The use of radium in consumer goods was phased out by the late 1960s, replaced by safer (though still radioactive) materials like Promethium and Tritium, and later, non-radioactive phosphorescent materials. For collectors, owning a piece of this history requires awareness and respect for the material's nature. Radium dials are still measurably radioactive today.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3 text-green-600">✓</span>
+                        Handling Do's
+                    </h3>
+                    <ul class="space-y-3 list-inside text-gray-700">
+                        <li><strong>Keep it contained:</strong> Keep the clock or watch fully assembled. The case and crystal provide important shielding.</li>
+                        <li><strong>Limit exposure:</strong> Enjoy your collection, but avoid keeping items directly next to you for extended periods (e.g., on a nightstand).</li>
+                        <li><strong>Wash hands:</strong> Wash your hands after handling vintage radium items, especially if they are damaged.</li>
+                        <li><strong>Ensure good ventilation:</strong> Radium decay produces radon gas. Display your collection in a well-ventilated area.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="text-3xl mr-3 text-red-600">✗</span>
+                        Handling Don'ts
+                    </h3>
+                     <ul class="space-y-3 list-inside text-gray-700">
+                        <li><strong>Don't open the case:</strong> Never open a radium clock or watch yourself. This can release radioactive dust. Let a professional watchmaker handle repairs.</li>
+                        <li><strong>Don't inhale or ingest:</strong> The primary danger is from inhaling or ingesting the radium paint dust. Never attempt to clean or scrape the dial.</li>
+                        <li><strong>Don't store in a bedroom:</strong> Due to radon gas emission, it's best not to store a large collection in a primary living or sleeping area.</li>
+                        <li><strong>Don't be complacent:</strong> While a single clock is generally low risk, treat the material with the respect it deserves.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p>This interactive display is for educational purposes. Information is synthesized from historical and scientific sources on radioactivity.</p>
+            <p class="text-sm mt-2">Always handle historical artifacts with care and appropriate safety measures.</p>
+        </div>
+    </footer>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+    
+    const decayCanvas = document.getElementById('decayCanvas');
+    const ctxDecay = decayCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        const parent = decayCanvas.parentElement;
+        decayCanvas.width = parent.clientWidth;
+        decayCanvas.height = parent.clientHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawInitialState() {
+        const w = decayCanvas.width;
+        const h = decayCanvas.height;
+        ctxDecay.clearRect(0, 0, w, h);
+        
+        ctxDecay.fillStyle = 'rgba(100, 100, 220, 0.8)';
+        ctxDecay.beginPath();
+        ctxDecay.arc(w / 4, h / 2, 20, 0, 2 * Math.PI);
+        ctxDecay.fill();
+        ctxDecay.font = "12px Arial";
+        ctxDecay.fillStyle = 'white';
+        ctxDecay.textAlign = 'center';
+        ctxDecay.fillText('Ra-226', w / 4, h / 2 + 35);
+
+        ctxDecay.fillStyle = 'rgba(150, 220, 150, 0.7)';
+        ctxDecay.beginPath();
+        ctxDecay.arc(w * 0.75, h / 2, 30, 0, 2 * Math.PI);
+        ctxDecay.fill();
+        ctxDecay.fillText('ZnS Crystal', w * 0.75, h / 2 + 45);
+    }
+    
+    drawInitialState();
+
+    class Particle {
+        constructor(x, y, targetX, targetY) {
+            this.x = x;
+            this.y = y;
+            this.size = 5;
+            this.targetX = targetX;
+            this.targetY = targetY;
+            this.speed = 2;
+            this.dx = (this.targetX - this.x) / (decayCanvas.width / this.speed);
+            this.dy = (this.targetY - this.y) / (decayCanvas.width / this.speed);
+        }
+        update() {
+            if (Math.abs(this.targetX - this.x) > 1) {
+                this.x += this.dx;
+                this.y += this.dy;
+            } else {
+                this.x = -10;
+            }
+        }
+        draw() {
+            ctxDecay.fillStyle = 'yellow';
+            ctxDecay.beginPath();
+            ctxDecay.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctxDecay.fill();
+        }
+    }
+
+    function animateDecay() {
+        drawInitialState();
+        particles.forEach((p, index) => {
+            p.update();
+            p.draw();
+            if (p.x === -10) {
+                flashPhosphor();
+                particles.splice(index, 1);
+            }
+        });
+        if (particles.length > 0) {
+            requestAnimationFrame(animateDecay);
+        } else {
+            drawInitialState();
+        }
+    }
+
+    function flashPhosphor() {
+        const w = decayCanvas.width;
+        const h = decayCanvas.height;
+        let flashes = 0;
+        const interval = setInterval(() => {
+            drawInitialState();
+            ctxDecay.fillStyle = `rgba(185, 255, 153, ${Math.random() * 0.5 + 0.5})`;
+            ctxDecay.beginPath();
+            ctxDecay.arc(w * 0.75, h / 2, 35, 0, 2 * Math.PI);
+            ctxDecay.fill();
+            
+            ctxDecay.font = "bold 16px Arial";
+            ctxDecay.fillStyle = 'black';
+            ctxDecay.textAlign = 'center';
+            ctxDecay.fillText('FLASH!', w * 0.75, h / 2 + 5);
+            
+            flashes++;
+            if (flashes > 5) {
+                clearInterval(interval);
+                drawInitialState();
+            }
+        }, 50);
+    }
+    
+    document.getElementById('simulateButton').addEventListener('click', () => {
+        if(particles.length === 0){
+             const startX = decayCanvas.width / 4 + 20;
+             const startY = decayCanvas.height / 2;
+             const targetX = decayCanvas.width * 0.75 - 30;
+             const targetY = decayCanvas.height / 2;
+             particles.push(new Particle(startX, startY, targetX, targetY));
+             animateDecay();
+        }
+    });
+
+    const historyData = {
+        labels: ['1898: Radium Discovered', '1914: US Radium Corp Founded', '1920s: Peak Popularity', '1927: First Lawsuit', '1938: Food & Drug Act', '1968: Use Discontinued'],
+        datasets: [{
+            label: 'Key Event',
+            data: [1, 2, 3, 4, 5, 6],
+            backgroundColor: [
+                'rgba(163, 163, 163, 0.6)',
+                'rgba(168, 85, 247, 0.6)',
+                'rgba(59, 130, 246, 0.6)',
+                'rgba(239, 68, 68, 0.6)',
+                'rgba(249, 115, 22, 0.6)',
+                'rgba(22, 163, 74, 0.6)',
+            ],
+            borderColor: [
+                'rgba(163, 163, 163, 1)',
+                'rgba(168, 85, 247, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(239, 68, 68, 1)',
+                'rgba(249, 115, 22, 1)',
+                'rgba(22, 163, 74, 1)',
+            ],
+            borderWidth: 1,
+            barThickness: 30,
+        }]
+    };
+    new Chart(document.getElementById('historyChart'), {
+        type: 'bar',
+        data: historyData,
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                             const details = [
+                                'Marie and Pierre Curie discover Radium.',
+                                'The company that would become infamous is founded.',
+                                'Radium is a wonder material, used in countless products.',
+                                'The "Radium Girls" begin their legal battle for justice.',
+                                'New regulations begin to control radioactive substances.',
+                                'Radium is fully phased out for consumer watch dials.'
+                             ];
+                             return details[context.dataIndex];
+                        },
+                        title: function() {
+                            return '';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                    max: 7
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const exposureData = {
+        labels: ['"Safe" Daily Limit (Hypothetical)', 'Dial Painter (Estimated)'],
+        datasets: [{
+            label: 'Radium Intake (micrograms)',
+            data: [0.1, 400],
+            backgroundColor: [
+                'rgba(52, 211, 153, 0.6)',
+                'rgba(239, 68, 68, 0.6)'
+            ],
+            borderColor: [
+                'rgba(5, 150, 105, 1)',
+                'rgba(185, 28, 28, 1)'
+            ],
+            borderWidth: 1,
+            barPercentage: 0.5,
+        }]
+    };
+    new Chart(document.getElementById('exposureChart'), {
+        type: 'bar',
+        data: exposureData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                 title: {
+                    display: true,
+                    text: 'Relative Daily Radium Intake (Logarithmic Scale)'
+                }
+            },
+            scales: {
+                y: {
+                    type: 'logarithmic',
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return Number(value.toString()).toExponential() + ' µg';
+                        }
+                    },
+                     title: {
+                        display: true,
+                        text: 'Micrograms (µg)'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
